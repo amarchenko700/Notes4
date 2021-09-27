@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">Notes</string>
+    <string name="toolbar_name">Заметки</string>
 </resources>
