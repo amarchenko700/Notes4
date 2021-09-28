@@ -16,6 +16,10 @@ public class NoteEntity implements Parcelable {
         this.description = description;
     }
 
+    public NoteEntity(){
+
+    }
+
     @Nullable
     public Integer getId() {
         return id;

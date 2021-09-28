@@ -72,7 +72,8 @@ public class NotesListActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         if (item.getItemId() == R.id.new_note_menu) {
-            openNoteScreen(null);
+            Integer idNewNote = notesRepo.createNote(new NoteEntity());
+            openNoteScreen(notesRepo.getNote(idNewNote));
             return true;
         }
         return super.onOptionsItemSelected(item);
