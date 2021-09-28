@@ -41,9 +41,10 @@ public class NotesRepoImpl implements NotesRepo {
 
     @Override
     public boolean editNote(Integer id, NoteEntity note) {
-        removeNote(id);
-        note.setId(id);
-        cache.add(note);
+        //removeNote(id);
+        //note.setId(id);
+        //cache.add(note);
+        cache.set(id, note);
         return true;
     }
 }

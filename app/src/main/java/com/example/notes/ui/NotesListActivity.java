@@ -1,5 +1,9 @@
 package com.example.notes.ui;
 
+import androidx.activity.result.ActivityResult;
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -7,6 +11,7 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
@@ -27,6 +32,9 @@ public class NotesListActivity extends AppCompatActivity {
     private NotesRepo notesRepo = new NotesRepoImpl();
     private NotesAdapter adapter = new NotesAdapter();
 
+    private ActivityResultLauncher<Intent> noteLauncher;
+    private NoteEntity noteEntity;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -35,7 +43,23 @@ public class NotesListActivity extends AppCompatActivity {
         fillRepoByTestValuesRepo();
         initToolbar();
         initRecyclerView();
+        initNoteLauncher();
 
+    }
+
+    private void initNoteLauncher(){
+        noteLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), new ActivityResultCallback<ActivityResult>() {
+            @Override
+            public void onActivityResult(ActivityResult result) {
+                if(result.getResultCode() == Activity.RESULT_OK){
+                    if(result.getData() != null){
+                        noteEntity = result.getData().getParcelableExtra(KEY_ITEM);
+                        notesRepo.editNote(noteEntity.getId(), noteEntity);
+                        adapter.setData(notesRepo.getNotes());
+                    }
+                }
+            }
+        });
     }
 
     @Override
@@ -57,7 +81,7 @@ public class NotesListActivity extends AppCompatActivity {
     private void openNoteScreen(@Nullable NoteEntity item){
         Intent intent = new Intent(this, NoteEditActivity.class);
         intent.putExtra(KEY_ITEM, item);
-        startActivity(intent);
+        noteLauncher.launch(intent);
     }
 
     private void initToolbar(){
@@ -78,18 +102,19 @@ public class NotesListActivity extends AppCompatActivity {
     }
 
     private void fillRepoByTestValuesRepo(){
-        notesRepo.createNote(new NoteEntity("Заметка 1", "Текст заметки"));
-        notesRepo.createNote(new NoteEntity("Заметка 2", "Текст заметки"));
-        notesRepo.createNote(new NoteEntity("Заметка 3", "Текст заметки"));
-        notesRepo.createNote(new NoteEntity("Заметка 4", "Текст заметки"));
-        notesRepo.createNote(new NoteEntity("Заметка 5", "Текст заметки"));
-        notesRepo.createNote(new NoteEntity("Заметка 6", "Текст заметки"));
-        notesRepo.createNote(new NoteEntity("Заметка 7", "Текст заметки"));
-        notesRepo.createNote(new NoteEntity("Заметка 8", "Текст заметки"));
-        notesRepo.createNote(new NoteEntity("Заметка 9", "Текст заметки"));
-        notesRepo.createNote(new NoteEntity("Заметка 10", "Текст заметки"));
-        notesRepo.createNote(new NoteEntity("Заметка 11", "Текст заметки"));
-        notesRepo.createNote(new NoteEntity("Заметка 12", "Текст заметки"));
-        notesRepo.createNote(new NoteEntity("Заметка 13", "Текст заметки"));
+        notesRepo.createNote(new NoteEntity("День 1", "Решил заниматься андроидом"));
+        notesRepo.createNote(new NoteEntity("День 2", "Записался на GeekBrains"));
+        notesRepo.createNote(new NoteEntity("День 3", "И пошла жара"));
+        notesRepo.createNote(new NoteEntity("День 4", "Теперь даже некогда отдыхать"));
+        notesRepo.createNote(new NoteEntity("День 5", "Только то и делаю, что что-то клипаю, клипаю и клипаю"));
+        notesRepo.createNote(new NoteEntity("День 6", "Иногда некогда покушать"));
+        notesRepo.createNote(new NoteEntity("День 7", "Но в целом учиться - очень круто"));
+        notesRepo.createNote(new NoteEntity("День 8", "Пишем на Java, скоро Kotlin - в общем мы крутые перцы "));
+        notesRepo.createNote(new NoteEntity("День 9", "Все отлично"));
+        notesRepo.createNote(new NoteEntity("День 10", "Все замечательно"));
+        notesRepo.createNote(new NoteEntity("День 11", "Это такой типа дневник"));
+        notesRepo.createNote(new NoteEntity("День 12", "Почти все"));
+        notesRepo.createNote(new NoteEntity("День 13", "Еще не все"));
+        notesRepo.createNote(new NoteEntity("День 14", "Теперь все"));
     }
 }
