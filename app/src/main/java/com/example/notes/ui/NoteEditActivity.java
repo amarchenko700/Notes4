@@ -28,17 +28,7 @@ public class NoteEditActivity extends AppCompatActivity {
         initTextView();
         openNote();
 
-        saveButton.setOnClickListener(v -> {
-            NoteEntity noteEntity = new NoteEntity(
-                    titleEditText.getText().toString(),
-                    detailEditText.getText().toString());
-            noteEntity.setId(id);
-            Intent resultIntent = new Intent();
-            resultIntent.putExtra(NotesListActivity.KEY_ITEM, noteEntity);
-            setResult(Activity.RESULT_OK, resultIntent);
-            finish();
-
-        });
+        saveButton.setOnClickListener(v -> {saveNote();});
     }
 
     private void initTextView(){
@@ -48,10 +38,29 @@ public class NoteEditActivity extends AppCompatActivity {
     }
 
     private void openNote(){
-        noteEntity = getIntent().getParcelableExtra(NotesListActivity.KEY_ITEM);
+        extractFromIntent();
+        fillNote();
+    }
+
+    private void fillNote(){
         titleEditText.setText(noteEntity.getTitle());
         detailEditText.setText(noteEntity.getDescription());
         id = noteEntity.getId();
+    }
+
+    private void extractFromIntent(){
+        noteEntity = getIntent().getParcelableExtra(NotesListActivity.KEY_ITEM);
+    }
+
+    private void saveNote(){
+        NoteEntity noteEntity = new NoteEntity(
+                titleEditText.getText().toString(),
+                detailEditText.getText().toString());
+        noteEntity.setId(id);
+        Intent resultIntent = new Intent();
+        resultIntent.putExtra(NotesListActivity.KEY_ITEM, noteEntity);
+        setResult(Activity.RESULT_OK, resultIntent);
+        finish();
     }
 
 }

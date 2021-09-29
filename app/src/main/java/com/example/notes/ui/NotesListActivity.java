@@ -47,16 +47,14 @@ public class NotesListActivity extends AppCompatActivity {
 
     }
 
-    private void initNoteLauncher(){
+    private void initNoteLauncher() {
         noteLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), new ActivityResultCallback<ActivityResult>() {
             @Override
             public void onActivityResult(ActivityResult result) {
-                if(result.getResultCode() == Activity.RESULT_OK){
-                    if(result.getData() != null){
-                        noteEntity = result.getData().getParcelableExtra(KEY_ITEM);
-                        notesRepo.editNote(noteEntity.getId(), noteEntity);
-                        adapter.setData(notesRepo.getNotes());
-                    }
+                if (result.getResultCode() == Activity.RESULT_OK && result.getData() != null) {
+                    noteEntity = result.getData().getParcelableExtra(KEY_ITEM);
+                    notesRepo.editNote(noteEntity.getId(), noteEntity);
+                    adapter.setData(notesRepo.getNotes());
                 }
             }
         });
@@ -79,18 +77,18 @@ public class NotesListActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    private void openNoteScreen(@Nullable NoteEntity item){
+    private void openNoteScreen(@Nullable NoteEntity item) {
         Intent intent = new Intent(this, NoteEditActivity.class);
         intent.putExtra(KEY_ITEM, item);
         noteLauncher.launch(intent);
     }
 
-    private void initToolbar(){
+    private void initToolbar() {
         toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
     }
 
-    private void initRecyclerView(){
+    private void initRecyclerView() {
         recyclerView = findViewById(R.id.recycler_view);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(adapter);
@@ -98,11 +96,11 @@ public class NotesListActivity extends AppCompatActivity {
         adapter.setData(notesRepo.getNotes());
     }
 
-    private void onItemClick(NoteEntity item){
+    private void onItemClick(NoteEntity item) {
         openNoteScreen(item);
     }
 
-    private void fillRepoByTestValuesRepo(){
+    private void fillRepoByTestValuesRepo() {
         notesRepo.createNote(new NoteEntity("День 1", "Решил заниматься андроидом"));
         notesRepo.createNote(new NoteEntity("День 2", "Записался на GeekBrains"));
         notesRepo.createNote(new NoteEntity("День 3", "И пошла жара"));
