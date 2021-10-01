@@ -19,17 +19,21 @@ public class NotesRepoImpl implements NotesRepo {
         return new ArrayList<>(cache);
     }
 
-    public NoteEntity getNote(Integer id){
-        return cache.get(id);
+    public NoteEntity getNote(NoteEntity note){
+        int indexNote = cache.indexOf(note);
+        if(indexNote != -1){
+            return cache.get(indexNote);
+        }
+        return new NoteEntity();
     }
 
     @Nullable
     @Override
-    public Integer createNote(NoteEntity note) {
+    public NoteEntity createNote(NoteEntity note) {
         Integer newId = counter++;
         note.setId(newId);
         cache.add(note);
-        return newId;
+        return note;
     }
 
     @Override
